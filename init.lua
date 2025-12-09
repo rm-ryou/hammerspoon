@@ -1,7 +1,7 @@
-hs = hs
+local hs = hs
 hs.loadSpoon("AClock")
 
-require("config.shortcut")
+require("config.application")
 
 hs.hotkey.bind({ "cmd", "alt" }, "C", function()
 	spoon.AClock:toggleShow()

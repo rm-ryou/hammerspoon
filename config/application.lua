@@ -4,6 +4,7 @@ local applications = {
 	{ key = "f", msg = "Finder", bundle_id = "com.apple.finder" },
 	{ key = "t", msg = "Wezterm", bundle_id = "com.github.wez.wezterm" },
 	{ key = "b", msg = "Chrome", bundle_id = "com.google.Chrome" },
+	{ key = "g", msg = "Chrome", bundle_id = "com.google.Chrome" },
 	{ key = "n", msg = "Obsidian", bundle_id = "md.obsidian" },
 	{ key = "d", msg = "Discord", bundle_id = "com.hnc.Discord" },
 	{ key = "m", msg = "Miro", bundle_id = "com.electrom.realtimeboard" },

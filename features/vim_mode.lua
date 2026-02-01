@@ -35,10 +35,55 @@ function M:toggleVimMode()
   end
 end
 
+local function buildBindings(vimMaps)
+  local bindings = {}
+
+  for _, group in pairs(vimMaps) do
+    for _, map in pairs(group) do
+      bindings[map.key] = function()
+        hs.eventtap.keyStroke(map.mods or {}, map.send, 0)
+      end
+    end
+  end
+
+  return bindings
+end
+
+M.bindings = buildBindings(keys.vim and keys.vim.normal or {})
+
 function M:init()
   hs.hotkey.bind(keys.mods.ctrl, keys.vim.toggle, function()
     self:toggleVimMode()
   end)
+
+  self.keyWatcher = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
+    if not self.enabled or not self:isBrowser(focusedAppName()) then
+      return false
+    end
+
+    local flags = event:getFlags()
+    local char = event:getCharacters()
+
+    if not flags.ctrl and not flags.cmd and not flags.alt then
+      local binding = self.bindings[char]
+      if binding then
+        binding()
+        return true
+      end
+    end
+
+    return false
+  end)
+  self.keyWatcher:start()
+
+  self.appWatcher = hs.application.watcher.new(function(appName, eventType, _)
+    if eventType == hs.application.watcher.activated then
+      if self.enabled and not self:isBrowser(appName) then
+        self:setEnabled(false)
+      end
+    end
+  end)
+  self.appWatcher:start()
 end
 
 M:init()
